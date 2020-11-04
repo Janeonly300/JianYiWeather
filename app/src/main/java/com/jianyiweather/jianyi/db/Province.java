@@ -1,18 +1,16 @@
 package com.jianyiweather.jianyi.db;
-
-import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
 public class Province extends LitePalSupport {
-    private String id;
+    private int id;
     private String provinceName; //省名字
     private int provinceCode; //省代号
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
