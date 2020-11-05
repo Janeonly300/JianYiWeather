@@ -3,6 +3,7 @@ package com.jianyiweather.jianyi;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.jianyiweather.jianyi.db.City;
 import com.jianyiweather.jianyi.db.County;
 import com.jianyiweather.jianyi.db.Province;
+import com.jianyiweather.jianyi.gson.Weather;
 import com.jianyiweather.jianyi.utils.HttpUtils;
 import com.jianyiweather.jianyi.utils.Utillity;
 
@@ -105,6 +107,13 @@ public class ChooseAear extends Fragment {
                 }else if (LEVEL_CITY == curLevel){//如果当前市级，则查询县
                     selectedCity = cityList.get(i);
                     queryCounty();
+                }else if (curLevel == LEVEL_COUNTY){
+                   //获取天气Id
+                    String weatherId = countyList.get(i).getWeatherId();
+                    Intent intent = new Intent(getContext(), WeatherActivity.class);
+                    intent.putExtra("weather_id",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -144,6 +153,9 @@ public class ChooseAear extends Fragment {
         }
     }
 
+    /**
+     * 查询城市，如果没有 则发送请求查询
+     */
     private void queryCity() {
         titleText.setText(selectedProvince.getProvinceName());
         btuBack.setVisibility(View.VISIBLE);
@@ -163,6 +175,9 @@ public class ChooseAear extends Fragment {
         }
     }
 
+    /**
+     * 查询县城，如果没有，则发送请求查询
+     */
     private void queryCounty() {
         titleText.setText(selectedCity.getCityName());
         countyList = LitePal.where(" cityId = ?",selectedCity.getId()+"").find(County.class);
@@ -181,6 +196,11 @@ public class ChooseAear extends Fragment {
         }
     }
 
+    /**
+     * 网络发送请求查询
+     * @param address
+     * @param type
+     */
     private void queryForServer(String address, final String type) {
         showProgress(getActivity());
         HttpUtils.sendHttpRequest(address, new Callback() {
@@ -211,11 +231,6 @@ public class ChooseAear extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                Thread.sleep(2000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
                             coloseProgress();
                             if("province".equals(type)){
                                 queryProvince();

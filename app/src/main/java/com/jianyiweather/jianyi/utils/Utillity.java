@@ -2,9 +2,11 @@ package com.jianyiweather.jianyi.utils;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.jianyiweather.jianyi.db.City;
 import com.jianyiweather.jianyi.db.County;
 import com.jianyiweather.jianyi.db.Province;
+import com.jianyiweather.jianyi.gson.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,5 +90,24 @@ public class Utillity {
             }
         }
         return false;
+    }
+
+    /**
+     * 将Json数据解析成weather对象
+     * @param response
+     * @return
+     */
+    public static Weather handWeatherResponse(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray hEweather = jsonObject.getJSONArray("HeWeather");
+            //在解析成Json字符串
+            String string = hEweather.getJSONObject(0).toString();
+            Weather weather = new Gson().fromJson(string, Weather.class);
+            return weather;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
