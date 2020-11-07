@@ -108,12 +108,19 @@ public class ChooseAear extends Fragment {
                     selectedCity = cityList.get(i);
                     queryCounty();
                 }else if (curLevel == LEVEL_COUNTY){
-                   //获取天气Id
-                    String weatherId = countyList.get(i).getWeatherId();
-                    Intent intent = new Intent(getContext(), WeatherActivity.class);
-                    intent.putExtra("weather_id",weatherId);
-                    startActivity(intent);
-                    getActivity().finish();
+                   String weatherId = countyList.get(i).getWeatherId();
+                    if(getActivity() instanceof MainActivity){
+                        //获取天气Id
+                        Intent intent = new Intent(getContext(), WeatherActivity.class);
+                        intent.putExtra("weather_id",weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else if(getActivity() instanceof WeatherActivity){
+                        WeatherActivity weatherActivity = (WeatherActivity)getActivity();
+                        weatherActivity.drawerLayout.closeDrawers();//关闭
+                        weatherActivity.swipeRefreshLayout.setRefreshing(true);
+                        weatherActivity.requestWeatherForServer(weatherId);
+                    }
                 }
             }
         });
@@ -210,7 +217,7 @@ public class ChooseAear extends Fragment {
                    @Override
                    public void run() {
                        coloseProgress();
-                       Toast.makeText(getContext(),"加载成功",Toast.LENGTH_SHORT).show();
+                       Toast.makeText(getContext(),"加载失败",Toast.LENGTH_SHORT).show();
                    }
                });
             }

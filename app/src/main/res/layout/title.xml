@@ -2,6 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_margin="15dp" android:layout_height="?attr/actionBarSize">
+    <Button
+        android:id="@+id/navBtu"
+        android:background="@drawable/home"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"/>
     <TextView
         android:id="@+id/title_city_text"
         android:textSize="20sp"
