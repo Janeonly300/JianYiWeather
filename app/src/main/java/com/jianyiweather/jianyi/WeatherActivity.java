@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.jianyiweather.jianyi.gson.Forecast;
 import com.jianyiweather.jianyi.gson.Weather;
+import com.jianyiweather.jianyi.service.UpdateLoadService;
 import com.jianyiweather.jianyi.utils.HttpUtils;
 import com.jianyiweather.jianyi.utils.Utillity;
 
@@ -194,6 +195,8 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+        Intent intent = new Intent(this, UpdateLoadService.class);
+        startService(intent);
     }
 
     /**
